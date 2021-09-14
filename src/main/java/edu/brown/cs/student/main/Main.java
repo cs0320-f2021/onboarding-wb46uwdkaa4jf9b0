@@ -60,16 +60,31 @@ public final class Main {
       runSparkServer((int) options.valueOf("port"));
     }
 
-    // TODO: Add your REPL here!
     try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
       String input;
       while ((input = br.readLine()) != null) {
         try {
           input = input.trim();
           String[] arguments = input.split(" ");
-          System.out.println(arguments[0]);
-          // TODO: complete your REPL by adding commands for addition "add" and subtraction
-          //  "subtract"
+
+          MathBot mathBot = new MathBot();
+
+          switch (arguments[0]) {
+            case "add":
+              System.out.println(mathBot.add(
+                  Double.parseDouble(arguments[1]),
+                  Double.parseDouble(arguments[2])));
+              break;
+            case "subtract":
+              System.out.println(
+                  mathBot.subtract(
+                      Double.parseDouble(arguments[1]),
+                      Double.parseDouble(arguments[2])));
+              break;
+            default:
+              System.out.println("ERROR: Input could not be processed");
+          }
+
         } catch (Exception e) {
           // e.printStackTrace();
           System.out.println("ERROR: We couldn't process your input");

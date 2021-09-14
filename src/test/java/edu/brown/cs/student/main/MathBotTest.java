@@ -1,6 +1,7 @@
 package edu.brown.cs.student.main;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
 
 import org.junit.Test;
 
@@ -11,6 +12,7 @@ public class MathBotTest {
     MathBot matherator9000 = new MathBot();
     double output = matherator9000.add(10.5, 3);
     assertEquals(13.5, output, 0.01);
+    assertEquals(3.0, matherator9000.add(1.25, 1.75), 0.01);
   }
 
   @Test
