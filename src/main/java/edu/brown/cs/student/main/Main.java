@@ -73,6 +73,7 @@ public final class Main {
 
           switch (arguments[0]) {
             case "add":
+<<<<<<< HEAD
               System.out.println(
                   mathBot.add(Double.parseDouble(arguments[1]), Double.parseDouble(arguments[2])));
               break;
@@ -127,6 +128,20 @@ public final class Main {
               break;
             default:
               System.out.println("ERROR: command '" + arguments[0] + "' is not supported");
+=======
+              System.out.println(mathBot.add(
+                  Double.parseDouble(arguments[1]),
+                  Double.parseDouble(arguments[2])));
+              break;
+            case "subtract":
+              System.out.println(
+                  mathBot.subtract(
+                      Double.parseDouble(arguments[1]),
+                      Double.parseDouble(arguments[2])));
+              break;
+            default:
+              System.out.println("ERROR: Input could not be processed");
+>>>>>>> e4db0866fce6ebcb3d330f37a8c8915fc0c25776
           }
 
         } catch (Exception e) {
