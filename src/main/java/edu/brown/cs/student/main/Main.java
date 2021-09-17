@@ -69,20 +69,24 @@ public final class Main {
           input = input.trim();
           String[] arguments = input.split(" ");
 
+          // Create new MathBot (part of lab)
           MathBot mathBot = new MathBot();
 
+          // switch on the user's command
           switch (arguments[0]) {
+            // Part of Lab
             case "add":
-<<<<<<< HEAD
               System.out.println(
                   mathBot.add(Double.parseDouble(arguments[1]), Double.parseDouble(arguments[2])));
               break;
+            // Part of Lab
             case "subtract":
               System.out.println(mathBot.subtract(Double.parseDouble(arguments[1]),
                   Double.parseDouble(arguments[2])));
               break;
             case "stars":
               try {
+                // Parse the CSV and extract the hashmap from it
                 ParseCSV starData = new ParseCSV(arguments[1]);
                 this.data = starData.getStars();
                 System.out.println("Read " + this.data.size() + " stars from " + arguments[1]);
@@ -91,66 +95,62 @@ public final class Main {
               }
               break;
             case "naive_neighbors":
+              // Convert k to an integer
               int k = Integer.parseInt(arguments[1]);
+
+              // Define xC, yC, and zC for later use
               double xC;
               double yC;
               double zC;
 
+              // Initialize the "name" variable to hold the name of a star
               String name = "";
 
+              // Checks if the user is typing the name of a star
               if (arguments[2].charAt(0) == '"') {
+                // Checks if the star's name is one word
                 if (arguments[2].endsWith("\"")) {
                   name = arguments[2].replaceAll("\"", "");
                 } else {
+                  // If not, loop over the following words until another quotation mark is reached
                   for (int i = 2; !arguments[i - 1].endsWith("\""); i++) {
                     name = name + " " + arguments[i].replaceAll("\"", "");
                   }
+                  // trim any excess spaces from the name variable
                   name = name.trim();
                 }
               }
 
+              // Checks if the star is in the hashmap
               if (this.data.containsKey(name)) {
+                // If so, define xC, yC, and zC to hold coordinate information
                 xC = data.get(name).getXC();
                 yC = data.get(name).getYC();
                 zC = data.get(name).getZC();
               } else {
+                // If not, then the user must be typing coordinates instead
+                //   thus, define xC, yC, and zC based on the user input
                 xC = Double.parseDouble(arguments[2]);
                 yC = Double.parseDouble(arguments[3]);
                 zC = Double.parseDouble(arguments[4]);
               }
 
+              // Create a new Neighbor object, which handles finding the nearest neighbors
               Neighbor neighbor = new Neighbor(this.data, k, xC, yC, zC);
 
+              // Print the nearest neighbors
               for (Star star : neighbor.nearestNeighbors()) {
                 System.out.println(star.toString());
               }
-
               break;
             default:
               System.out.println("ERROR: command '" + arguments[0] + "' is not supported");
-=======
-              System.out.println(mathBot.add(
-                  Double.parseDouble(arguments[1]),
-                  Double.parseDouble(arguments[2])));
-              break;
-            case "subtract":
-              System.out.println(
-                  mathBot.subtract(
-                      Double.parseDouble(arguments[1]),
-                      Double.parseDouble(arguments[2])));
-              break;
-            default:
-              System.out.println("ERROR: Input could not be processed");
->>>>>>> e4db0866fce6ebcb3d330f37a8c8915fc0c25776
           }
-
         } catch (Exception e) {
-          // e.printStackTrace();
           System.out.println("ERROR: We couldn't process your input");
         }
       }
     } catch (Exception e) {
-      e.printStackTrace();
       System.out.println("ERROR: Invalid input for REPL");
     }
 
