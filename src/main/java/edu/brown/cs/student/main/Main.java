@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.HashMap;
 import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
@@ -28,6 +29,7 @@ public final class Main {
 
   // use port 4567 by default when running server
   private static final int DEFAULT_PORT = 4567;
+  private HashMap<String, Star> data;
 
   /**
    * The initial method called when execution begins.
@@ -38,7 +40,7 @@ public final class Main {
     new Main(args).run();
   }
 
-  private String[] args;
+  private final String[] args;
 
   private Main(String[] args) {
     this.args = args;
@@ -60,16 +62,73 @@ public final class Main {
       runSparkServer((int) options.valueOf("port"));
     }
 
-    // TODO: Add your REPL here!
     try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
       String input;
       while ((input = br.readLine()) != null) {
         try {
           input = input.trim();
           String[] arguments = input.split(" ");
-          System.out.println(arguments[0]);
-          // TODO: complete your REPL by adding commands for addition "add" and subtraction
-          //  "subtract"
+
+          MathBot mathBot = new MathBot();
+
+          switch (arguments[0]) {
+            case "add":
+              System.out.println(
+                  mathBot.add(Double.parseDouble(arguments[1]), Double.parseDouble(arguments[2])));
+              break;
+            case "subtract":
+              System.out.println(mathBot.subtract(Double.parseDouble(arguments[1]),
+                  Double.parseDouble(arguments[2])));
+              break;
+            case "stars":
+              try {
+                ParseCSV starData = new ParseCSV(arguments[1]);
+                this.data = starData.getStars();
+                System.out.println("Read " + this.data.size() + " stars from " + arguments[1]);
+              } catch (Exception e) {
+                System.out.println("ERROR: Could not process the file");
+              }
+              break;
+            case "naive_neighbors":
+              int k = Integer.parseInt(arguments[1]);
+              double xC;
+              double yC;
+              double zC;
+
+              String name = "";
+
+              if (arguments[2].charAt(0) == '"') {
+                if (arguments[2].endsWith("\"")) {
+                  name = arguments[2].replaceAll("\"", "");
+                } else {
+                  for (int i = 2; !arguments[i - 1].endsWith("\""); i++) {
+                    name = name + " " + arguments[i].replaceAll("\"", "");
+                  }
+                  name = name.trim();
+                }
+              }
+
+              if (this.data.containsKey(name)) {
+                xC = data.get(name).getXC();
+                yC = data.get(name).getYC();
+                zC = data.get(name).getZC();
+              } else {
+                xC = Double.parseDouble(arguments[2]);
+                yC = Double.parseDouble(arguments[3]);
+                zC = Double.parseDouble(arguments[4]);
+              }
+
+              Neighbor neighbor = new Neighbor(this.data, k, xC, yC, zC);
+
+              for (Star star : neighbor.nearestNeighbors()) {
+                System.out.println(star.toString());
+              }
+
+              break;
+            default:
+              System.out.println("ERROR: command '" + arguments[0] + "' is not supported");
+          }
+
         } catch (Exception e) {
           // e.printStackTrace();
           System.out.println("ERROR: We couldn't process your input");

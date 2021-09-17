@@ -1,0 +1,6 @@
+INPUT
+stars data/improper.csv
+OUTPUT
+ERROR: Invalid CSV format
+Read 0 stars from data/improper.csv
+END
